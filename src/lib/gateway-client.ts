@@ -65,6 +65,9 @@ async function gatewayFetch<T>(path: string, init?: RequestInit): Promise<T> {
 export async function checkEngineAccess(apiKey: string | null): Promise<'ok' | 'unauthorized' | 'unreachable'> {
   try {
     const res = await engineRequest('/namespaces?limit=1', undefined, apiKey);
+    // Only the status matters, but read the body to its end: until the page
+    // does, the browser keeps the request, and its connection, open.
+    await res.text().catch(() => '');
     if (res.status === 401) return 'unauthorized';
     // 403: the key is accepted but may not list namespaces (a scoped key)
     return res.ok || res.status === 403 ? 'ok' : 'unreachable';
