@@ -1,9 +1,6 @@
 <p>
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/orcher-io/ui/main/assets/banner.svg">
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/orcher-io/ui/main/assets/banner-light.svg">
-    <img alt="ORCHER Dashboard" src="https://raw.githubusercontent.com/orcher-io/ui/main/assets/banner.svg" width="100%">
-  </picture>
+  <img alt="ORCHER Dashboard" src="https://raw.githubusercontent.com/orcher-io/ui/main/assets/banner.svg#gh-dark-mode-only" width="100%">
+  <img alt="ORCHER Dashboard" src="https://raw.githubusercontent.com/orcher-io/ui/main/assets/banner-light.svg#gh-light-mode-only" width="100%">
 </p>
 
 <p align="center"><sub>See every workflow the engine runs, from the engine itself.</sub></p>
