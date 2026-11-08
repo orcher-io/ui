@@ -1,0 +1,85 @@
+/*
+ * Orcher Dark Theme Overrides
+ *
+ * Monochrome dark palette — white/gray on dark backgrounds.
+ * No blue accent. Matches the light theme's black-and-white philosophy.
+ */
+
+.radix-themes.dark,
+.dark .radix-themes {
+
+  /* ── Gray scale: dark backgrounds with white text ── */
+  --gray-1: #111111;
+  --gray-2: #191919;
+  --gray-3: #222222;
+  --gray-4: #2a2a2a;
+  --gray-5: #313131;
+  --gray-6: #3a3a3a;
+  --gray-7: #484848;
+  --gray-8: #606060;
+  --gray-9: #6e6e6e;
+  --gray-10: #7b7b7b;
+  --gray-11: #b4b4b4;
+  --gray-12: #eeeeee;
+
+  /* Gray alpha */
+  --gray-a1: rgba(255, 255, 255, 0.02);
+  --gray-a2: rgba(255, 255, 255, 0.04);
+  --gray-a3: rgba(255, 255, 255, 0.07);
+  --gray-a4: rgba(255, 255, 255, 0.10);
+  --gray-a5: rgba(255, 255, 255, 0.13);
+  --gray-a6: rgba(255, 255, 255, 0.17);
+  --gray-a7: rgba(255, 255, 255, 0.23);
+  --gray-a8: rgba(255, 255, 255, 0.32);
+  --gray-a9: rgba(255, 255, 255, 0.39);
+  --gray-a10: rgba(255, 255, 255, 0.44);
+  --gray-a11: rgba(255, 255, 255, 0.68);
+  --gray-a12: rgba(255, 255, 255, 0.93);
+
+  /* ── Accent color: monochrome white (boosted for visible active states) ── */
+  --accent-1: #161616;
+  --accent-2: #1e1e1e;
+  --accent-3: #2a2a2a;
+  --accent-4: #383838;
+  --accent-5: #454545;
+  --accent-6: #555555;
+  --accent-7: #6a6a6a;
+  --accent-8: #8c8c8c;
+  --accent-9: #ffffff;
+  --accent-10: #e8e8e8;
+  --accent-11: #ffffff;
+  --accent-12: #ffffff;
+
+  /* Accent contrast (text on accent-9 / white background) */
+  --accent-contrast: #000000;
+
+  /* Accent alpha */
+  --accent-a1: rgba(255, 255, 255, 0.02);
+  --accent-a2: rgba(255, 255, 255, 0.04);
+  --accent-a3: rgba(255, 255, 255, 0.08);
+  --accent-a4: rgba(255, 255, 255, 0.12);
+  --accent-a5: rgba(255, 255, 255, 0.17);
+  --accent-a6: rgba(255, 255, 255, 0.24);
+  --accent-a7: rgba(255, 255, 255, 0.32);
+  --accent-a8: rgba(255, 255, 255, 0.50);
+  --accent-a9: rgba(255, 255, 255, 1.0);
+  --accent-a10: rgba(255, 255, 255, 0.90);
+  --accent-a11: rgba(255, 255, 255, 1.0);
+  --accent-a12: rgba(255, 255, 255, 1.0);
+
+  /* ── Surfaces ── */
+  --color-background: #111111;
+  --color-panel: #191919;
+  --color-panel-solid: #191919;
+  --color-surface: #141414;
+  --color-overlay: rgba(0, 0, 0, 0.6);
+
+  /* ── Selection ── */
+  --color-selection-root: rgba(255, 255, 255, 0.10);
+
+  /* ── Focus ring ── */
+  --focus-1: rgba(255, 255, 255, 0.12);
+  --focus-2: rgba(255, 255, 255, 0.24);
+  --focus-3: rgba(255, 255, 255, 0.36);
+  --focus-4: rgba(255, 255, 255, 0.48);
+}

@@ -1,0 +1,60 @@
+/* React Flow — dark theme overrides
+   Uses hardcoded colors because React Flow renders outside the Radix Theme provider */
+
+.react-flow__controls {
+  background: #171717 !important;
+  border: 1px solid #2a2a2a !important;
+  border-radius: 0px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+  overflow: hidden;
+}
+
+.react-flow__controls-button {
+  background: #171717 !important;
+  border: none !important;
+  border-bottom: 1px solid #2a2a2a !important;
+  color: #a3a3a3 !important;
+  fill: #a3a3a3 !important;
+  width: 28px !important;
+  height: 28px !important;
+  padding: 4px !important;
+}
+
+.react-flow__controls-button:hover {
+  background: #262626 !important;
+  color: #e5e5e5 !important;
+  fill: #e5e5e5 !important;
+}
+
+.react-flow__controls-button:last-child {
+  border-bottom: none !important;
+}
+
+.react-flow__controls-button svg {
+  fill: currentColor !important;
+  max-width: 14px;
+  max-height: 14px;
+}
+
+/* MiniMap */
+.react-flow__minimap {
+  background: #0f0f0f !important;
+  border: 1px solid #2a2a2a !important;
+  border-radius: 0px !important;
+  overflow: hidden;
+}
+
+/* Edges */
+.react-flow__edge-path {
+  stroke-linecap: round;
+}
+
+/* Node selection — remove default outline */
+.react-flow__node.selected > div {
+  outline: none !important;
+}
+
+/* Attribution hidden */
+.react-flow__attribution {
+  display: none !important;
+}

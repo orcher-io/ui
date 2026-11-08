@@ -1,0 +1,24 @@
+/* Compact table matching timeline row height and font */
+.orcher-compact-table {
+  font-size: 12px !important;
+}
+
+.orcher-compact-table .rt-TableCell,
+.orcher-compact-table .rt-TableColumnHeaderCell {
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+  height: 34px !important;
+  font-size: 12px !important;
+}
+
+.orcher-compact-table .rt-TableRow {
+  height: 34px !important;
+}
+
+.orcher-compact-table {
+  border-radius: 0 !important;
+}
+
+.orcher-compact-table .rt-TableRootTable {
+  border-radius: 0 !important;
+}

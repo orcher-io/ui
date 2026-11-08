@@ -1,0 +1,18 @@
+packages: []
+
+# sharp (Next's image optimizer) ships prebuilt binaries; its install script
+# only matters for building from source, which this app never needs.
+allowBuilds:
+  sharp: false
+
+minimumReleaseAgeExclude:
+  - '@orcher/workbench-core@0.1.0'
+  - '@orcher/workbench-di@0.1.0'
+  - '@orcher/workbench-plugin-api@0.1.0'
+  - '@orcher/workbench-plugin-breadcrumb-bar@0.1.0'
+  - '@orcher/workbench-plugin-explorer@0.1.0'
+  - '@orcher/workbench-plugin-header@0.1.0'
+  - '@orcher/workbench-plugin-settings@0.1.0'
+  - '@orcher/workbench-services@0.1.0 || 0.1.1'
+  - '@orcher/workbench-ui@0.1.0'
+  - '@orcher/workbench-window-manager@0.1.1'

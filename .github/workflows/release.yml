@@ -1,0 +1,62 @@
+name: Release
+
+# Publishes the static dashboard the engine image serves. Push a tag that
+# matches package.json's version: git tag v0.2.0 && git push origin v0.2.0
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write # the release
+  id-token: write # build-provenance attestation
+  attestations: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: The tag is the package version
+        run: |
+          version=$(node -p "require('./package.json').version")
+          if [ "${GITHUB_REF_NAME}" != "v${version}" ]; then
+            echo "tag ${GITHUB_REF_NAME} does not match package.json version ${version}" >&2
+            exit 1
+          fi
+          echo "VERSION=${version}" >> "$GITHUB_ENV"
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec tsc --noEmit -p .
+      - run: pnpm build
+
+      - name: Package
+        run: |
+          name="orcher-ui-${VERSION}"
+          mkdir "$name"
+          cp -R out/. "$name/"
+          cp LICENSE "$name/LICENSE"
+          cp out/_next/static/third-party-notices.txt "$name/THIRD_PARTY_NOTICES"
+          # Same bytes for the same tree: sorted, no owners, fixed times
+          tar --sort=name --owner=0 --group=0 --numeric-owner --mtime='@0' \
+            -czf "$name.tar.gz" "$name"
+          sha256sum "$name.tar.gz" > "$name.tar.gz.sha256"
+          echo "ASSET=$name.tar.gz" >> "$GITHUB_ENV"
+
+      - uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: ${{ env.ASSET }}
+
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "v${VERSION}" "$ASSET" "$ASSET.sha256" \
+            --title "Orcher dashboard ${VERSION}" \
+            --notes "Static files for the engine to serve. Verify with: gh attestation verify ${ASSET} --repo ${GITHUB_REPOSITORY}"

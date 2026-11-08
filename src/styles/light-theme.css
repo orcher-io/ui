@@ -1,0 +1,85 @@
+/*
+ * Autodesk-inspired Light Theme Overrides
+ *
+ * A stark black-and-white palette with minimal gray accents.
+ * Overrides Radix UI Themes CSS variables when light mode is active.
+ */
+
+.radix-themes.light,
+.light .radix-themes {
+
+  /* ── Gray scale: pushed to pure white/black extremes ── */
+  --gray-1: #ffffff;
+  --gray-2: #fafafa;
+  --gray-3: #f5f5f5;
+  --gray-4: #efefef;
+  --gray-5: #e8e8e8;
+  --gray-6: #e0e0e0;
+  --gray-7: #cccccc;
+  --gray-8: #b0b0b0;
+  --gray-9: #8c8c8c;
+  --gray-10: #6e6e6e;
+  --gray-11: #3d3d3d;
+  --gray-12: #000000;
+
+  /* Gray alpha (for overlays, hover states) */
+  --gray-a1: rgba(0, 0, 0, 0.01);
+  --gray-a2: rgba(0, 0, 0, 0.03);
+  --gray-a3: rgba(0, 0, 0, 0.05);
+  --gray-a4: rgba(0, 0, 0, 0.07);
+  --gray-a5: rgba(0, 0, 0, 0.09);
+  --gray-a6: rgba(0, 0, 0, 0.12);
+  --gray-a7: rgba(0, 0, 0, 0.2);
+  --gray-a8: rgba(0, 0, 0, 0.32);
+  --gray-a9: rgba(0, 0, 0, 0.45);
+  --gray-a10: rgba(0, 0, 0, 0.57);
+  --gray-a11: rgba(0, 0, 0, 0.76);
+  --gray-a12: rgba(0, 0, 0, 0.95);
+
+  /* ── Accent color: monochrome black ── */
+  --accent-1: #ffffff;
+  --accent-2: #fafafa;
+  --accent-3: #f0f0f0;
+  --accent-4: #e8e8e8;
+  --accent-5: #d4d4d4;
+  --accent-6: #b8b8b8;
+  --accent-7: #999999;
+  --accent-8: #6e6e6e;
+  --accent-9: #000000;
+  --accent-10: #1a1a1a;
+  --accent-11: #000000;
+  --accent-12: #000000;
+
+  /* Accent contrast (text on accent-9 background) */
+  --accent-contrast: #ffffff;
+
+  /* Accent alpha */
+  --accent-a1: rgba(0, 0, 0, 0.01);
+  --accent-a2: rgba(0, 0, 0, 0.03);
+  --accent-a3: rgba(0, 0, 0, 0.06);
+  --accent-a4: rgba(0, 0, 0, 0.09);
+  --accent-a5: rgba(0, 0, 0, 0.17);
+  --accent-a6: rgba(0, 0, 0, 0.28);
+  --accent-a7: rgba(0, 0, 0, 0.40);
+  --accent-a8: rgba(0, 0, 0, 0.57);
+  --accent-a9: rgba(0, 0, 0, 1.0);
+  --accent-a10: rgba(0, 0, 0, 0.90);
+  --accent-a11: rgba(0, 0, 0, 1.0);
+  --accent-a12: rgba(0, 0, 0, 1.0);
+
+  /* ── Surfaces ── */
+  --color-background: #ffffff;
+  --color-panel: #ffffff;
+  --color-panel-solid: #ffffff;
+  --color-surface: #fafafa;
+  --color-overlay: rgba(0, 0, 0, 0.4);
+
+  /* ── Selection ── */
+  --color-selection-root: rgba(0, 0, 0, 0.08);
+
+  /* ── Focus ring ── */
+  --focus-1: rgba(0, 0, 0, 0.12);
+  --focus-2: rgba(0, 0, 0, 0.24);
+  --focus-3: rgba(0, 0, 0, 0.36);
+  --focus-4: rgba(0, 0, 0, 0.48);
+}

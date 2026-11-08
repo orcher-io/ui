@@ -1,0 +1,80 @@
+/* Global 11px base font for data-dense dashboard UI */
+.radix-themes {
+  --default-font-size: 12px !important;
+  font-size: 12px !important;
+}
+
+/* Radix Text/Table/Badge inherit from root */
+.radix-themes .rt-Text:not([data-size]) {
+  font-size: 12px;
+}
+
+.radix-themes .rt-TableCell {
+  font-size: 12px;
+}
+
+.radix-themes .rt-Badge {
+  font-size: 10px;
+}
+
+/* Keep headings at their natural sizes */
+.radix-themes .rt-Heading {
+  font-size: revert;
+}
+
+/* Inputs and selects */
+.radix-themes input,
+.radix-themes select,
+.radix-themes textarea {
+  font-size: 12px;
+}
+
+/* Remove border radius and thin borders on inputs */
+.radix-themes .rt-TextFieldRoot,
+.radix-themes .rt-TextAreaRoot,
+.radix-themes .rt-TextFieldInput,
+.radix-themes .rt-TextAreaInput {
+  border-radius: 0 !important;
+}
+
+.radix-themes .rt-TextFieldRoot,
+.radix-themes .rt-TextAreaRoot {
+  box-shadow: inset 0 0 0 1px var(--gray-a6) !important;
+}
+
+/* Remove border radius from cards */
+.radix-themes .rt-Card,
+.radix-themes .rt-Card::before,
+.radix-themes .rt-Card::after {
+  border-radius: 0 !important;
+  --card-border-radius: 0 !important;
+}
+
+/* Remove border radius from badges */
+.radix-themes .rt-Badge {
+  border-radius: 0 !important;
+}
+
+/* Consistent button sizing across the system */
+.radix-themes .rt-Button {
+  border-radius: 0 !important;
+  font-size: 12px !important;
+  height: 26px !important;
+}
+
+/* Text buttons get horizontal padding */
+.radix-themes .rt-Button[data-variant="solid"],
+.radix-themes .rt-Button[data-variant="soft"] {
+  padding: 0 10px !important;
+}
+
+/* Ghost/icon buttons get minimal padding */
+.radix-themes .rt-Button[data-variant="ghost"] {
+  padding: 0 6px !important;
+  min-width: 26px !important;
+}
+
+/* HelpTip: show info icon when its label cell is hovered */
+.detail-row-label:hover .help-tip-icon {
+  opacity: 1 !important;
+}
