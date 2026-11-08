@@ -1,59 +1,71 @@
-# Orcher Dashboard
+<p>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/orcher-io/ui/main/assets/banner.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/orcher-io/ui/main/assets/banner-light.svg">
+    <img alt="ORCHER Dashboard" src="https://raw.githubusercontent.com/orcher-io/ui/main/assets/banner.svg" width="100%">
+  </picture>
+</p>
 
-Workflow orchestration dashboard for [Orcher](https://github.com/orcher-io/orcher), built on [Workbench](https://github.com/orcher-io/workbench), a plugin-based React shell.
+<p align="center"><sub>See every workflow the engine runs, from the engine itself.</sub></p>
 
-## Prerequisites
+<br />
 
-- Node.js >= 20
-- pnpm
+<div>
+  <a href="https://github.com/orcher-io/ui/releases/latest"><img src="https://img.shields.io/github/v/release/orcher-io/ui?style=flat-square&labelColor=0a0a0a&color=04B385&logo=github&logoColor=white&label=release" alt="release"></a>
+  <a href="https://github.com/orcher-io/ui/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/orcher-io/ui/ci.yml?branch=main&style=flat-square&labelColor=0a0a0a&color=38BDF0&logo=github&logoColor=white&label=CI" alt="CI"></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/badge/license-Apache_2.0-04B385?style=flat-square&labelColor=0a0a0a" alt="Apache 2.0"></a>
+</div>
 
-## Setup
+<br />
 
-The dashboard talks to a running engine. `pnpm dev` proxies `/api/v1` to
-`ORCHER_ENGINE_URL` (default `http://localhost:8080`), as if the engine served
-the page:
+The ORCHER dashboard is static files the engine serves on its HTTP port, beside
+its REST API. It has no server of its own: it calls the engine from the browser.
+
+- <img height="14" src="https://octicons-col.vercel.app/workflow/38BDF0"> **Workflows**: list and filter runs; open one for its tasks, timeline, graph, journal and logs
+- <img height="14" src="https://octicons-col.vercel.app/clock/38BDF0"> **Schedules**: create, pause, resume and delete, with each schedule's runs
+- <img height="14" src="https://octicons-col.vercel.app/server/38BDF0"> **Workers**: who is connected, their host and resources, and when each last checked in
+- <img height="14" src="https://octicons-col.vercel.app/stack/38BDF0"> **Namespaces and batch operations**: manage both from the same shell
+- <img height="14" src="https://octicons-col.vercel.app/key/38BDF0"> **Sign-in**: asks for an API key only when the engine requires one
+- <img height="14" src="https://octicons-col.vercel.app/columns/38BDF0"> **Tabs and splits**: built on [Workbench](https://github.com/orcher-io/workbench), with a command palette
+
+<br />
+
+### <img height="16" src="https://octicons-col.vercel.app/play/38BDF0"> Use it
+
+Open the engine's HTTP address, `http://localhost:8080` by default. An engine with
+dashboard support ([orcher#452](https://github.com/orcher-io/orcher/pull/452))
+serves the files in `ui.dir`, `/usr/share/orcher/ui` unless set; `--no-ui` turns
+it off. To serve a release yourself:
 
 ```bash
-git clone https://github.com/orcher-io/ui.git
-cd ui
+gh release download v0.2.1 --repo orcher-io/ui -p 'orcher-ui-*'
+sha256sum -c orcher-ui-0.2.1.tar.gz.sha256
+gh attestation verify orcher-ui-0.2.1.tar.gz --repo orcher-io/ui
+tar -xzf orcher-ui-0.2.1.tar.gz
+ORCHER_UI_DIR=$PWD/orcher-ui-0.2.1 orchestrator
+```
+
+> [!NOTE]
+> When the engine requires a credential, the dashboard asks for an API key
+> (`orcher api-key create`) and keeps it in this browser until you sign out. The
+> files themselves are public; the engine decides what a key may see.
+
+<br />
+
+### <img height="16" src="https://octicons-col.vercel.app/tools/38BDF0"> Development
+
+```bash
 pnpm install
-ORCHER_ENGINE_URL=http://localhost:8080 pnpm dev
+ORCHER_ENGINE_URL=http://localhost:8080 pnpm dev   # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000). If the engine requires a
-credential, the dashboard asks for an API key (`orcher api-key create`); an
-engine without authentication opens straight to the dashboard.
+`pnpm dev` proxies `/api/v1` to the engine, as if the engine served the page.
+`pnpm build` writes the static files to `out/`, plus
+`out/_next/static/third-party-notices.txt`: the licence of every package in the
+bundle. A licence not on `ALLOWED_LICENSES` in `next.config.js` fails the build.
 
-## Build
-
-`pnpm build` writes static files to `out/`. The engine serves them on its HTTP
-port, beside `/api/v1`, so the dashboard has no server of its own: it calls the
-engine's REST API from the browser, same-origin, with the signed-in key as a
-Bearer token. Whatever serves `out/` must answer unknown paths with
-`index.html`.
-
-The build also writes `out/_next/static/third-party-notices.txt`: the licence of
-every third-party package in the browser bundle. A package under a licence not
-on `ALLOWED_LICENSES` in `next.config.js` fails the build.
-
-## Releasing
-
-Bump `version` in `package.json` in a pull request, merge it, then push the tag:
-
-```bash
-git tag v0.2.0 && git push origin v0.2.0
-```
-
-The Release workflow builds the dashboard and publishes `orcher-ui-<version>.tar.gz`
-(the static files, `LICENSE` and `THIRD_PARTY_NOTICES`) with its SHA-256 and a
-build-provenance attestation on a GitHub release. The engine image is built
-from a pinned release of it.
-
-## Developing Workbench alongside
-
-The `@orcher/workbench-*` packages come from npm. To change Workbench and see
-it here immediately, point `WORKBENCH_DIR` at a Workbench checkout and its
-sources are used in place of the packages:
+To work on Workbench at the same time, point `WORKBENCH_DIR` at a checkout and its
+sources replace the npm packages:
 
 ```bash
 git clone https://github.com/orcher-io/workbench.git ../workbench
@@ -61,21 +73,38 @@ git clone https://github.com/orcher-io/workbench.git ../workbench
 WORKBENCH_DIR=../workbench pnpm dev
 ```
 
-## Architecture
+<br />
+
+### <img height="16" src="https://octicons-col.vercel.app/git-merge/38BDF0"> How it reaches the engine
 
 The data hooks request the dashboard's `/api/*` routes through `apiFetch`
-(`src/lib/api-transport.ts`). The standalone dashboard answers those routes in
-the browser (`src/lib/engine-routes.ts`) by calling the engine
-(`src/lib/gateway-client.ts`). An app that embeds these components and serves
-`/api/*` itself, as the hosted console does, keeps the default transport,
-plain `fetch`.
+([`src/lib/api-transport.ts`](src/lib/api-transport.ts)). This dashboard answers
+them in the browser ([`src/lib/engine-routes.ts`](src/lib/engine-routes.ts)) by
+calling the engine's REST API, same-origin, with the signed-in key as a Bearer
+token. An app that embeds these components and serves `/api/*` itself keeps the
+default transport, plain `fetch`.
 
-The dashboard uses the Workbench shell (tabs, splits, command palette, plugin system) and adds Orcher-specific plugins:
+<br />
 
-- **orcher-connection** — Server connection management and settings
-- **orcher-workflows** — Workflow explorer, detail views, lifecycle commands (cancel, terminate, reset)
-- **orcher-journal** — Execution journal timeline viewer with color-coded event types
+### <img height="16" src="https://octicons-col.vercel.app/rocket/38BDF0"> Releasing
 
-## License
+Bump `version` in `package.json` in a pull request, merge it, then push the tag:
 
-Apache-2.0 — see [LICENSE](LICENSE).
+```bash
+git tag v0.2.2 && git push origin v0.2.2
+```
+
+The Release workflow publishes `orcher-ui-<version>.tar.gz` (the static files,
+`LICENSE` and `THIRD_PARTY_NOTICES`), built reproducibly, with its SHA-256 and a
+build-provenance attestation. The engine image pins a release of it.
+
+<br />
+
+### <img height="16" src="https://octicons-col.vercel.app/heart/38BDF0"> Contributing
+
+Issues and pull requests are welcome. CI typechecks and builds every pull request,
+the build checking every bundled licence; run `pnpm build` before proposing a change.
+
+### <img height="16" src="https://octicons-col.vercel.app/law/38BDF0"> License
+
+Licensed under the [Apache License, Version 2.0](LICENSE).
