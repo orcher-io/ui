@@ -1,29 +1,30 @@
-/* React Flow — dark theme overrides
-   Uses hardcoded colors because React Flow renders outside the Radix Theme provider */
+/* React Flow, in the dashboard's theme. The graph renders inside the Radix
+   theme, so its colour variables follow light and dark; the fallbacks are the
+   dark values, for a graph rendered anywhere else. */
 
 .react-flow__controls {
-  background: #171717 !important;
-  border: 1px solid #2a2a2a !important;
+  background: var(--color-panel-solid, #171717) !important;
+  border: 1px solid var(--gray-6, #2a2a2a) !important;
   border-radius: 0px !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+  box-shadow: 0 2px 8px var(--black-a4, rgba(0, 0, 0, 0.4)) !important;
   overflow: hidden;
 }
 
 .react-flow__controls-button {
-  background: #171717 !important;
+  background: var(--color-panel-solid, #171717) !important;
   border: none !important;
-  border-bottom: 1px solid #2a2a2a !important;
-  color: #a3a3a3 !important;
-  fill: #a3a3a3 !important;
+  border-bottom: 1px solid var(--gray-6, #2a2a2a) !important;
+  color: var(--gray-11, #a3a3a3) !important;
+  fill: var(--gray-11, #a3a3a3) !important;
   width: 28px !important;
   height: 28px !important;
   padding: 4px !important;
 }
 
 .react-flow__controls-button:hover {
-  background: #262626 !important;
-  color: #e5e5e5 !important;
-  fill: #e5e5e5 !important;
+  background: var(--gray-4, #262626) !important;
+  color: var(--gray-12, #e5e5e5) !important;
+  fill: var(--gray-12, #e5e5e5) !important;
 }
 
 .react-flow__controls-button:last-child {
@@ -38,8 +39,8 @@
 
 /* MiniMap */
 .react-flow__minimap {
-  background: #0f0f0f !important;
-  border: 1px solid #2a2a2a !important;
+  background: var(--gray-2, #0f0f0f) !important;
+  border: 1px solid var(--gray-6, #2a2a2a) !important;
   border-radius: 0px !important;
   overflow: hidden;
 }
