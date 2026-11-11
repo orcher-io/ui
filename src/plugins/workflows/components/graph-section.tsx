@@ -326,12 +326,17 @@ function layoutWithDagre(nodes: Node[], edges: Edge[]): Node[] {
 
   return nodes.map((node) => {
     const pos = g.node(node.id);
+    const height = node.type === 'terminal' ? TERMINAL_NODE_HEIGHT : TASK_NODE_HEIGHT;
     return {
       ...node,
       position: {
         x: pos.x - NODE_WIDTH / 2,
-        y: pos.y - (node.type === 'terminal' ? TERMINAL_NODE_HEIGHT : TASK_NODE_HEIGHT) / 2,
+        y: pos.y - height / 2,
       },
+      // The sizes the layout used. The graph never stores React Flow's
+      // measurements back, so without these the minimap drew no node at all.
+      initialWidth: NODE_WIDTH,
+      initialHeight: height,
     };
   });
 }
@@ -491,6 +496,9 @@ export function GraphSection({ entries, loading }: GraphSectionProps) {
   return (
     <Box style={{ height: '100%', minHeight: 400 }}>
       <ReactFlow
+        // Without it React Flow marks its container `light`, which Radix's
+        // light palette also matches: the graph's colours ignored dark mode
+        colorMode={isDark ? 'dark' : 'light'}
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
