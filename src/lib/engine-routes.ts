@@ -28,6 +28,7 @@ import {
   listSchedules,
   listWorkers,
   pauseSchedule,
+  resetExecution,
   resumeSchedule,
   terminateBatchOperation,
   updateNamespace,
@@ -117,9 +118,9 @@ route('GET', '/api/workflows/:id', (_req, { id }) =>
       workflowId: result.executionId,
       status: result.status.toLowerCase(),
       workflowType: result.workflowName,
-      // The engine's status response carries neither
-      taskQueue: '',
-      namespace: '',
+      // Older engines leave these out of the status
+      taskQueue: result.taskQueue ?? '',
+      namespace: result.namespace ?? '',
       startedAt: result.startedAt,
       completedAt: result.completedAt,
       error: result.error,
@@ -144,13 +145,19 @@ route('POST', '/api/workflows/:id/cancel', (req, { id }) =>
   }),
 );
 
-route('POST', '/api/workflows/:id/reset', async () =>
-  // The engine resets a workflow over gRPC only; its REST API has no reset yet
-  json(
-    { error: 'Workflow reset is not yet available via REST API. Use the CLI: orcher workflow reset' },
-    501,
-  ),
-);
+route('POST', '/api/workflows/:id/reset', async (req, { id }) => {
+  const body = await req.json().catch(() => ({}));
+  try {
+    return json(await resetExecution(id, Number(body.target_event_id), body.reason ?? ''));
+  } catch (err) {
+    // What the engine refused, and why, is the caller's to know: a bad entry
+    // (400), an unknown execution (404), a run that may not be reset now (409)
+    if (err instanceof EngineError && [400, 404, 409].includes(err.status)) {
+      return json({ error: err.message }, err.status);
+    }
+    return failure(err, 'Failed to reset workflow');
+  }
+});
 
 // ── Namespaces ───────────────────────────────────────────────────────────────
 

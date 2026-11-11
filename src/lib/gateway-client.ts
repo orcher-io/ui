@@ -97,6 +97,9 @@ export interface ExecutionStatusResponse {
   executionId: string;
   workflowName: string;
   workflowVersion: string;
+  /** Newer engines name these; older ones leave them out */
+  namespace?: string;
+  taskQueue?: string;
   status: string;
   submittedAt: string;
   startedAt?: string;
@@ -151,6 +154,21 @@ export async function getExecutionStatus(
   executionId: string,
 ): Promise<ExecutionStatusResponse> {
   return gatewayFetch(`/executions/${executionId}/status`);
+}
+
+/**
+ * Reset an execution to a journal entry: the engine keeps the entries up to
+ * and including it and runs the workflow again from there, as a new execution.
+ */
+export async function resetExecution(
+  executionId: string,
+  targetEventId: number,
+  reason: string,
+): Promise<{ executionId: string; newExecutionId: string }> {
+  return gatewayFetch(`/executions/${encodeURIComponent(executionId)}/reset`, {
+    method: 'POST',
+    body: JSON.stringify({ targetEventId, reason }),
+  });
 }
 
 export async function getExecutionResult(executionId: string): Promise<any> {
