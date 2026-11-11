@@ -134,11 +134,8 @@ export function WorkflowDetailEditor({ workflowId, executionId }: WorkflowDetail
         await apiCancelWorkflow(workflowId, 'Terminated from dashboard', true);
         refresh();
       } else if (confirmAction === 'reset') {
-        // For reset, we use event ID 1 as default — in a real implementation
-        // the confirm dialog would have an input field for the event ID
-        await apiResetWorkflow(workflowId, 1, 'Reset from dashboard');
-        refresh();
-        refreshJournal();
+        // From its first journal entry: the workflow runs again from the start
+        await reset();
       }
     } catch (err: any) {
       toast.error(err.message);
@@ -147,6 +144,16 @@ export function WorkflowDetailEditor({ workflowId, executionId }: WorkflowDetail
       setConfirmAction(null);
     }
   };
+
+  // A reset runs the workflow again as a new execution; this one stays as it was
+  async function reset() {
+    const { newExecutionId } = await apiResetWorkflow(workflowId, 1, 'Reset from dashboard');
+    toast.success('Reset: the workflow runs again', {
+      description: `New execution ${newExecutionId}`,
+    });
+    refresh();
+    refreshJournal();
+  }
 
   if (loading) {
     return <DetailSkeleton />;
@@ -186,9 +193,7 @@ export function WorkflowDetailEditor({ workflowId, executionId }: WorkflowDetail
         await apiCancelWorkflow(workflowId, 'Terminated from dashboard', true);
         refresh();
       } else if (action === 'reset') {
-        await apiResetWorkflow(workflowId, 1, 'Reset from dashboard');
-        refresh();
-        refreshJournal();
+        await reset();
       }
     } catch (err: any) {
       toast.error(err.message);
