@@ -29,9 +29,8 @@ its REST API. It has no server of its own: it calls the engine from the browser.
 
 ### <img height="16" src="https://octicons-col.vercel.app/play/38BDF0"> Use it
 
-Open the engine's HTTP address, `http://localhost:8080` by default. An engine with
-dashboard support ([orcher#452](https://github.com/orcher-io/orcher/pull/452))
-serves the files in `ui.dir`, `/usr/share/orcher/ui` unless set; `--no-ui` turns
+Open the engine's HTTP address, `http://localhost:8080` by default. The engine (0.7.0 or
+later) serves the files in `ui.dir`, `/usr/share/orcher/ui` unless set; `--no-ui` turns
 it off. To serve a release yourself:
 
 ```bash
