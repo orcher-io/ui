@@ -11,6 +11,7 @@ import {
 import { ChevronDownIcon, ChevronRightIcon } from '@radix-ui/react-icons';
 import type { JournalEntry } from '../../../hooks/use-orcher-api';
 import { journaledTaskResult, stepResult } from './task-result';
+import { PayloadValue, hasPayload, type ShownPayload } from '../../../components/payload-value';
 
 interface TaskInfo {
   taskId: string;
@@ -18,7 +19,7 @@ interface TaskInfo {
   status: 'scheduled' | 'started' | 'completed' | 'failed';
   taskQueue?: string;
   input?: Record<string, unknown>;
-  result?: string;
+  result?: ShownPayload;
   error?: string;
   durationMs?: number;
   attempt?: number;
@@ -221,11 +222,11 @@ export function TasksSection({ entries }: TasksSectionProps) {
                           </>
                         )}
 
-                        {task.result && (
+                        {hasPayload(task.result) && (
                           <>
                             <Text style={{ color: 'var(--gray-8)' }}>Result</Text>
                             <Text style={{ color: 'var(--gray-12)', fontFamily: 'monospace', gridColumn: '2 / -1', maxHeight: 80, overflow: 'auto', whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
-                              {task.result}
+                              <PayloadValue payload={task.result} />
                             </Text>
                           </>
                         )}

@@ -29,6 +29,7 @@ import { SearchableSelect } from "../../../components/searchable-select";
 import { useGlobalNamespace } from "../../../contexts/namespace-context";
 import { resolveNamespace } from "../../../hooks/use-orcher-api";
 import { journaledTaskResult, stepResult } from "./task-result";
+import { PayloadValue, hasPayload, type ShownPayload } from "../../../components/payload-value";
 
 // ============================================================================
 // Types & Constants
@@ -142,7 +143,7 @@ interface TaskNode {
   taskQueue?: string;
   attempt?: number;
   input?: string;
-  result?: string;
+  result?: ShownPayload;
   error?: string;
   scheduledAt?: string;
   completedAt?: string;
@@ -649,11 +650,11 @@ function WorkflowRow({
                         </span>
                       </>
                     )}
-                    {task.result && (
+                    {hasPayload(task.result) && (
                       <>
                         <span style={{ color: "var(--gray-8)" }}>Result</span>
                         <span style={{ color: "var(--gray-11)", fontFamily: "monospace", fontSize: 10, gridColumn: "2 / -1", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 400 }}>
-                          {task.result}
+                          <PayloadValue payload={task.result} />
                         </span>
                       </>
                     )}

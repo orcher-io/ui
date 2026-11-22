@@ -5,6 +5,8 @@ import { Box, Text, Flex, Switch, Badge, ScrollArea } from '@radix-ui/themes';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { useTheme, type ThemeAppearance } from '@orcher/workbench-ui';
 import { SearchableSelect } from '../../components/searchable-select';
+import { PayloadKeysEditor } from '../../components/payload-keys-editor';
+import { usePayloadKeys } from '../../hooks/use-payload-keys';
 
 // ============================================================================
 // Settings schema
@@ -55,7 +57,12 @@ const SETTINGS: SettingDef[] = [
   { key: 'advanced.apiRateLimit', type: 'number', label: 'API Rate Limit', description: 'Maximum number of API requests per minute from the dashboard.', default: 100, category: 'Advanced', suffix: 'req/min' },
 ];
 
-const CATEGORIES = [...new Set(SETTINGS.map((s) => s.category))];
+// Decryption keys are not a stored setting: they live in session storage and
+// have their own editor, shown as the last category.
+const ENCRYPTION = 'Encryption';
+const ENCRYPTION_SEARCH = 'encryption decryption keys encrypted payloads';
+
+const CATEGORIES = [...new Set(SETTINGS.map((s) => s.category)), ENCRYPTION];
 
 // ============================================================================
 // Storage
@@ -179,6 +186,7 @@ export function OrcherSettingsEditor() {
   const { appearance, setTheme } = useTheme();
   const contentRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const payloadKeys = usePayloadKeys();
 
   useEffect(() => {
     const stored = loadSettings();
@@ -218,7 +226,10 @@ export function OrcherSettingsEditor() {
     return groups;
   }, [search]);
 
-  const visibleCategories = CATEGORIES.filter((cat) => (filteredByCategory[cat]?.length ?? 0) > 0);
+  const showEncryption = !search || ENCRYPTION_SEARCH.includes(search.toLowerCase());
+  const visibleCategories = CATEGORIES.filter((cat) =>
+    cat === ENCRYPTION ? showEncryption : (filteredByCategory[cat]?.length ?? 0) > 0,
+  );
 
   // Scroll to category — lock scroll tracking until user manually scrolls again
   const clickedRef = useRef(false);
@@ -272,7 +283,7 @@ export function OrcherSettingsEditor() {
         </Text>
         {visibleCategories.map((cat) => {
           const isActive = activeCategory === cat;
-          const count = filteredByCategory[cat]?.length ?? 0;
+          const count = cat === ENCRYPTION ? payloadKeys.length : filteredByCategory[cat]?.length ?? 0;
           return (
             <Flex
               key={cat}
@@ -352,6 +363,14 @@ export function OrcherSettingsEditor() {
                   {cat}
                 </Text>
                 <div style={{ height: 1, background: 'var(--gray-a3)', marginBottom: 4 }} />
+                {cat === ENCRYPTION && (
+                  <Box style={{ padding: '12px 0' }}>
+                    <Text style={{ fontSize: 12, fontWeight: 500, color: 'var(--gray-12)', display: 'block', marginBottom: 4 }}>
+                      Decryption Keys
+                    </Text>
+                    <PayloadKeysEditor />
+                  </Box>
+                )}
                 {filteredByCategory[cat].map((setting) => {
                   const isModified = values[setting.key] !== undefined && values[setting.key] !== setting.default;
                   return (
