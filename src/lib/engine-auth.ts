@@ -6,6 +6,8 @@
  * in this browser's storage, and sends it as a Bearer token on every request.
  */
 
+import { clearPayloadKeys } from './payload-keys';
+
 const STORAGE_KEY = 'orcher.apiKey';
 
 type Listener = () => void;
@@ -26,6 +28,8 @@ export function signIn(apiKey: string): void {
 
 export function signOut(): void {
   localStorage.removeItem(STORAGE_KEY);
+  // Whoever signs in next is not handed the last person's decryption keys
+  clearPayloadKeys();
   notifySignInRequired();
 }
 

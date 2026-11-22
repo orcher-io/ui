@@ -23,6 +23,7 @@ its REST API. It has no server of its own: it calls the engine from the browser.
 - <img height="14" src="https://octicons-col.vercel.app/server/38BDF0"> **Workers**: who is connected, their host and resources, and when each last checked in
 - <img height="14" src="https://octicons-col.vercel.app/stack/38BDF0"> **Namespaces and batch operations**: manage both from the same shell
 - <img height="14" src="https://octicons-col.vercel.app/key/38BDF0"> **Sign-in**: asks for an API key only when the engine requires one
+- <img height="14" src="https://octicons-col.vercel.app/lock/38BDF0"> **Encrypted payloads**: opened in the browser with a key you give it, which never leaves the page
 - <img height="14" src="https://octicons-col.vercel.app/columns/38BDF0"> **Tabs and splits**: built on [Workbench](https://github.com/orcher-io/workbench), with a command palette
 
 <br />
@@ -45,6 +46,28 @@ ORCHER_UI_DIR=$PWD/orcher-ui-0.2.1 orchestrator
 > When the engine requires a credential, the dashboard asks for an API key
 > (`orcher api-key create`) and keeps it in this browser until you sign out. The
 > files themselves are public; the engine decides what a key may see.
+
+<br />
+
+### <img height="16" src="https://octicons-col.vercel.app/lock/38BDF0"> Encrypted payloads
+
+Clients and workers that are given an encryption key seal every payload before
+it reaches the engine, which stores and returns what it cannot read. The
+dashboard shows such a payload as **Encrypted** until it has the key.
+
+Add keys under **Settings → Encryption**, or from **Add a key** beside an
+encrypted value: the key as base64 of its 32 bytes, with its id if the writer
+named it. A payload that names its key is opened with that one; otherwise each
+key is tried. Compressed payloads are opened with no key.
+
+- A key is held in this tab's session storage and nowhere else. It is gone when
+  the tab closes or you sign out, and it is never sent to the engine: decryption
+  is WebCrypto, in the page.
+- Without a key you still see everything the engine itself can read: workflow
+  and task names, ids, task queues, namespaces, labels, statuses, timings and
+  error messages.
+- The dashboard does not encrypt what it sends. A form that sends a payload
+  says so while a key is set.
 
 <br />
 

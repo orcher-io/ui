@@ -38,6 +38,7 @@ import {
 import { cronToText } from '../../../utils/cron-text';
 import { useDrawer } from '../../../contexts/drawer-context';
 import { TableSkeleton } from '../../../components/loading-skeleton';
+import { UnencryptedSendNotice } from '../../../components/payload-value';
 
 const TIMEZONE_OPTIONS: { value: string; label: string }[] = (() => {
   try {
@@ -294,6 +295,10 @@ function CreateSchedulePanel({
                   <Text style={{ fontSize: 12, fontWeight: 500, display: 'block', marginBottom: 2 }}>Description</Text>
                   <TextArea placeholder="Optional description" value={description} onChange={(e) => setDescription(e.target.value)} rows={2} />
                 </label>
+                <UnencryptedSendNotice>
+                  The dashboard does not encrypt what it sends: workflows this schedule starts
+                  get an empty input, stored unencrypted.
+                </UnencryptedSendNotice>
                 {error && <Text style={{ fontSize: 12, color: 'var(--red-9)' }}>{error}</Text>}
               </Flex>
             </Box>
