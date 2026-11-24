@@ -9,13 +9,31 @@ import {
   ExternalLinkIcon,
   StarIcon,
 } from '@radix-ui/react-icons';
-import type { ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
+import { apiFetch } from '@/lib/api-transport';
+import { DASHBOARD_VERSION } from '@/lib/version';
 
 // ============================================================================
-// Version — bump this to trigger Welcome on update
+// Versions
 // ============================================================================
 
-export const ORCHER_VERSION = '0.1.0';
+/** The version of the engine this dashboard is reading, once it has answered. */
+function useEngineVersion(): string | null {
+  const [version, setVersion] = useState<string | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    apiFetch('/api/system/info')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((info) => {
+        if (!cancelled && info && typeof info.version === 'string') setVersion(info.version);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  return version;
+}
 
 // ============================================================================
 // Section components
@@ -46,11 +64,10 @@ function CommandBlock({ label, command }: { label: string; command: string }) {
   );
 }
 
-function FeatureItem({ text, isNew }: { text: string; isNew?: boolean }) {
+function FeatureItem({ text }: { text: string }) {
   return (
     <Flex align="center" gap="2" py="1">
       <Text style={{ fontSize: 12, color: 'var(--gray-11)' }}>• {text}</Text>
-      {isNew && <Badge size="1" variant="soft" color="green">NEW</Badge>}
     </Flex>
   );
 }
@@ -77,6 +94,7 @@ function LinkItem({ label, url }: { label: string; url: string }) {
 // ============================================================================
 
 export function WelcomePage() {
+  const engineVersion = useEngineVersion();
   return (
     <ScrollArea style={{ height: '100%' }}>
       <Box style={{ maxWidth: 900, margin: '0 auto', padding: '24px 24px' }}>
@@ -84,7 +102,7 @@ export function WelcomePage() {
         <Flex direction="column" gap="2" mb="5">
           <Flex align="center" gap="3">
             <Heading size="6">Welcome to Orcher</Heading>
-            <Badge variant="soft" color="gray">v{ORCHER_VERSION}</Badge>
+            {engineVersion && <Badge variant="soft" color="gray">Engine v{engineVersion}</Badge>}
           </Flex>
           <Text style={{ fontSize: 13, color: 'var(--gray-9)', lineHeight: 1.5 }}>
             A high-performance workflow orchestration platform — built with Rust.
@@ -107,12 +125,13 @@ export function WelcomePage() {
               command="orcher dev start"
             />
             <CommandBlock
-              label="3. Scaffold a new workflow project"
-              command="orcher new rust my-workflow && cd my-workflow"
+              label="3. Create a project: python, typescript or rust"
+              command="orcher new rust my-app && cd my-app"
             />
             <CommandBlock
-              label="4. Run your worker"
-              command="cargo run"
+              label="4. Run the worker in one terminal, and start a workflow in another"
+              command={`cargo run -- worker
+cargo run -- start Ada`}
             />
             <Text style={{ fontSize: 11, color: 'var(--gray-8)', marginTop: 4, display: 'block' }}>
               The engine serves gRPC on :50051 and its REST API on :8080, which this dashboard reads.
@@ -120,9 +139,9 @@ export function WelcomePage() {
           </SectionCard>
 
           {/* Alternative: Manual Setup */}
-          <SectionCard icon={<CodeIcon width={18} height={18} />} title="Manual Setup (without CLI)">
+          <SectionCard icon={<CodeIcon width={18} height={18} />} title="From source (without the CLI)">
             <Text style={{ fontSize: 12, color: 'var(--gray-9)', marginBottom: 12, display: 'block' }}>
-              If you prefer to run each component manually:
+              In a checkout of the engine, github.com/orcher-io/orcher:
             </Text>
             <CommandBlock
               label="Create the database and apply the schema"
@@ -134,10 +153,6 @@ DATABASE_URL=postgresql://localhost/orcher \\
               label="Start the engine (gRPC :50051, REST :8080)"
               command={`DATABASE_URL=postgresql://localhost/orcher \\
   cargo run --release -p orcher-orchestrator`}
-            />
-            <CommandBlock
-              label="Run a benchmark to populate data"
-              command="bash scripts/benchmark.sh --quick --sdk rust"
             />
           </SectionCard>
 
@@ -171,30 +186,22 @@ DATABASE_URL=postgresql://localhost/orcher \\
           </SectionCard>
 
           {/* SDK Examples */}
-          <SectionCard icon={<CodeIcon width={18} height={18} />} title="SDK Quick Reference">
-            <CommandBlock label="Scaffold Rust project" command="orcher new my-workflow" />
-            <CommandBlock label="Scaffold TypeScript project" command="orcher new my-workflow --sdk typescript && cd my-workflow && npm install" />
-            <CommandBlock label="Scaffold Python project" command="orcher new my-workflow --sdk python && cd my-workflow && pip install -e ." />
-            <CommandBlock label="Multi-worker benchmark" command="bash scripts/benchmark.sh --workers 2,4 --sdk rust" />
-            <CommandBlock label="Run database migrations" command="cargo run -p orcher-orchestrator -- migrate" />
+          <SectionCard icon={<CodeIcon width={18} height={18} />} title="CLI Quick Reference">
+            <CommandBlock label="A Rust project" command="orcher new rust my-app" />
+            <CommandBlock label="A TypeScript project" command="orcher new typescript my-app && cd my-app && npm install && npm run build" />
+            <CommandBlock label="A Python project" command="orcher new python my-app && cd my-app && python3 -m venv .venv && .venv/bin/pip install -r requirements.txt" />
+            <CommandBlock label="Run the project's workflow end to end" command="orcher test" />
           </SectionCard>
 
-          {/* What's New */}
-          <SectionCard icon={<LightningBoltIcon width={18} height={18} />} title="What's New in v0.1.0">
-            <FeatureItem text="Workflow Overview dashboard with charts" isNew />
-            <FeatureItem text="Gantt-style workflow timelines with Hour/Day/Week/Month views" isNew />
-            <FeatureItem text="DAG graph visualization for workflow tasks" isNew />
-            <FeatureItem text="Workflow detail drawer with Tasks, Timeline, Graph, Journal, Logs" isNew />
-            <FeatureItem text="Schedule management (create, pause, resume, delete)" isNew />
-            <FeatureItem text="Worker monitoring with capacity visualization" isNew />
-            <FeatureItem text="Namespace management and global namespace filter" isNew />
-            <FeatureItem text="Dark/Light theme with live switching" isNew />
-            <FeatureItem text="Searchable dropdown filters across all views" isNew />
-            <FeatureItem text="Drawer back-navigation stack" isNew />
-            <FeatureItem text="Workflow Reset from dashboard" />
-            <FeatureItem text="Worker Affinity routing" />
-            <FeatureItem text="Session support for Python + TypeScript SDKs" />
-            <FeatureItem text="Eager task return for sub-millisecond dispatch" />
+          {/* What the dashboard shows */}
+          <SectionCard icon={<LightningBoltIcon width={18} height={18} />} title="In this dashboard">
+            <FeatureItem text="Overview of workflow runs, with charts" />
+            <FeatureItem text="Workflow timelines by hour, day, week and month" />
+            <FeatureItem text="A run's tasks, timeline, graph, journal and logs" />
+            <FeatureItem text="Schedules: create, pause, resume, delete" />
+            <FeatureItem text="Workers and their capacity" />
+            <FeatureItem text="Namespaces, and a namespace filter across every view" />
+            <FeatureItem text="Reset a workflow to an earlier point" />
           </SectionCard>
 
           {/* Keyboard Shortcuts */}
@@ -222,7 +229,7 @@ DATABASE_URL=postgresql://localhost/orcher \\
         {/* Footer */}
         <Flex justify="center" mt="5" mb="3">
           <Text style={{ fontSize: 11, color: 'var(--gray-7)' }}>
-            Orcher Dashboard v{ORCHER_VERSION} — Built on @orcher-io/platform
+            Orcher Dashboard v{DASHBOARD_VERSION}{engineVersion ? `, engine v${engineVersion}` : ''}
           </Text>
         </Flex>
       </Box>
@@ -234,15 +241,16 @@ DATABASE_URL=postgresql://localhost/orcher \\
 // Version check — should Welcome be shown?
 // ============================================================================
 
+// Welcome opens again when the dashboard's version changes
 const WELCOME_VERSION_KEY = 'orcher-welcome-version';
 
 export function shouldShowWelcome(): boolean {
   if (typeof window === 'undefined') return false;
   const lastSeen = localStorage.getItem(WELCOME_VERSION_KEY);
-  return lastSeen !== ORCHER_VERSION;
+  return lastSeen !== DASHBOARD_VERSION;
 }
 
 export function markWelcomeSeen(): void {
   if (typeof window === 'undefined') return;
-  localStorage.setItem(WELCOME_VERSION_KEY, ORCHER_VERSION);
+  localStorage.setItem(WELCOME_VERSION_KEY, DASHBOARD_VERSION);
 }

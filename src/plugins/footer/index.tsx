@@ -1,5 +1,6 @@
 'use client';
 
+import { DASHBOARD_VERSION } from '@/lib/version';
 import { useState, useEffect } from 'react';
 import { Box, Text, Flex } from '@radix-ui/themes';
 import { SunIcon, MoonIcon } from '@radix-ui/react-icons';
@@ -109,7 +110,7 @@ export function OrcherFooterRight() {
       </Box>
       <Text style={{ fontSize: 11, color: 'var(--gray-7)' }}>|</Text>
       <Text style={{ fontSize: 11, color: 'var(--gray-8)' }}>
-        Orcher v0.1.0
+        Dashboard v{DASHBOARD_VERSION}
       </Text>
     </Flex>
   );

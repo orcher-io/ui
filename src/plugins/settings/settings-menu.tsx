@@ -1,5 +1,6 @@
 'use client';
 
+import { DASHBOARD_VERSION } from '@/lib/version';
 import { useState } from 'react';
 import { Box, Text, Flex, Separator } from '@radix-ui/themes';
 import {
@@ -192,7 +193,7 @@ export function SettingsMenu({ onOpenSettings, onSignOut }: SettingsMenuProps) {
       >
         <Box px="3" py="2" style={{ minWidth: 180 }}>
           <Text style={{ fontSize: 12, fontWeight: 600, color: 'var(--gray-12)', display: 'block' }}>Orcher</Text>
-          <Text style={{ fontSize: 11, color: 'var(--gray-8)', display: 'block', marginTop: 2 }}>v0.1.0</Text>
+          <Text style={{ fontSize: 11, color: 'var(--gray-8)', display: 'block', marginTop: 2 }}>v{DASHBOARD_VERSION}</Text>
           <Text style={{ fontSize: 11, color: 'var(--gray-8)', display: 'block', marginTop: 4, lineHeight: 1.4 }}>
             High-performance workflow orchestration platform
           </Text>
@@ -233,7 +234,7 @@ export function SettingsMenu({ onOpenSettings, onSignOut }: SettingsMenuProps) {
       <Separator size="4" my="1" />
 
       <Box px="3" py="1">
-        <Text style={{ fontSize: 10, color: 'var(--gray-7)' }}>Orcher Dashboard v0.1.0</Text>
+        <Text style={{ fontSize: 10, color: 'var(--gray-7)' }}>Orcher Dashboard v{DASHBOARD_VERSION}</Text>
       </Box>
     </Box>
   );
