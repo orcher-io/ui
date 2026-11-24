@@ -281,7 +281,7 @@ export function WorkflowDetailEditor({ workflowId, executionId }: WorkflowDetail
           }}
         >
           <CopyableId label="Execution ID" value={status?.executionId ?? workflowId} />
-          <CopyableId label="Workflow ID" value={status?.workflowId ?? '—'} />
+          <CopyableId label="Workflow ID" value={status?.workflowId || '—'} />
 
           <Text style={{ color: 'var(--gray-8)', fontSize: 12 }}>Namespace</Text>
           <Text style={{ color: 'var(--gray-12)', fontSize: 12 }}>
