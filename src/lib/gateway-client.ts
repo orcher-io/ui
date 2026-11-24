@@ -427,6 +427,17 @@ export interface WorkerInfo {
   createdAt: string;
 }
 
+export interface SystemInfo {
+  name: string;
+  /** The engine's own version, e.g. "0.7.5" */
+  version: string;
+  uptime_seconds: number;
+}
+
+export async function getSystemInfo(): Promise<SystemInfo> {
+  return gatewayFetch('/system/info');
+}
+
 export async function listWorkers(limit = 100, offset = 0): Promise<{ workers: WorkerInfo[]; total: number }> {
   return gatewayFetch(`/workers?limit=${limit}&offset=${offset}`);
 }

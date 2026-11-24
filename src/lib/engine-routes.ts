@@ -21,6 +21,7 @@ import {
   getExecutionStatus,
   getNamespace,
   getSchedule,
+  getSystemInfo,
   listBatchOperations,
   listExecutions,
   listNamespaces,
@@ -272,6 +273,11 @@ route('POST', '/api/batch-operations/:id/terminate', (_req, { id }) =>
 // Where the dashboard's engine is: the origin that served it
 route('GET', '/api/config', async () =>
   json({ gatewayUrl: typeof window === 'undefined' ? '' : window.location.origin }),
+);
+
+// The engine itself: its name and version
+route('GET', '/api/system/info', () =>
+  attempt('Failed to read the engine version', async () => json(await getSystemInfo())),
 );
 
 /** Answer a dashboard `/api/*` request; 404 for a path no route claims. */
