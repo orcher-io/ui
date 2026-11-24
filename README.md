@@ -121,8 +121,8 @@ build-provenance attestation. The engine image pins a release of it.
 
 ### <img height="16" src="https://octicons-col.vercel.app/heart/38BDF0"> Contributing
 
-Issues and pull requests are welcome. CI typechecks and builds every pull request,
-the build checking every bundled licence; run `pnpm build` before proposing a change.
+Issues and pull requests are welcome. [CONTRIBUTING.md](CONTRIBUTING.md) covers the
+setup, the checks CI runs, and where things are.
 
 ### <img height="16" src="https://octicons-col.vercel.app/law/38BDF0"> License
 
