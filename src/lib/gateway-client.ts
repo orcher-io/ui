@@ -82,6 +82,8 @@ export async function checkEngineAccess(apiKey: string | null): Promise<'ok' | '
 
 export interface ExecutionSummary {
   executionId: string;
+  /** The id the client chose. Engines before 0.7.6 leave it out */
+  workflowId?: string;
   workflowName: string;
   workflowVersion: string;
   status: string;
@@ -95,6 +97,8 @@ export interface ExecutionSummary {
 
 export interface ExecutionStatusResponse {
   executionId: string;
+  /** The id the client chose. Engines before 0.7.6 leave it out */
+  workflowId?: string;
   workflowName: string;
   workflowVersion: string;
   /** Newer engines name these; older ones leave them out */

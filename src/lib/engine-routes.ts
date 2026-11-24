@@ -97,7 +97,8 @@ route('GET', '/api/workflows', (_req, _p, url) =>
     return json({
       workflows: (result.executions ?? []).map((exec) => ({
         executionId: exec.executionId,
-        workflowId: exec.executionId,
+        // The id the client chose; an engine that does not report it leaves it empty
+        workflowId: exec.workflowId ?? '',
         workflowType: exec.workflowName,
         status: exec.status.toLowerCase(),
         startedAt: exec.submittedAt,
@@ -116,7 +117,7 @@ route('GET', '/api/workflows/:id', (_req, { id }) =>
     const result = await getExecutionStatus(id);
     return json({
       executionId: result.executionId,
-      workflowId: result.executionId,
+      workflowId: result.workflowId ?? '',
       status: result.status.toLowerCase(),
       workflowType: result.workflowName,
       // Older engines leave these out of the status
