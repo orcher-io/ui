@@ -310,6 +310,44 @@ const plugins = [
 ];
 
 
+// The pages a link can name, by the path after `/orcher/`
+const LINKABLE_TABS: Record<string, { title: string; editorId: string; icon: string }> = {
+  welcome: { title: 'Welcome', editorId: 'orcher.welcome', icon: 'rocket' },
+  'workflows/overview': { title: 'Overview', editorId: 'orcher.workflows-overview', icon: 'dashboard' },
+  workflows: { title: 'All Workflows', editorId: 'orcher.workflows-table', icon: 'workflows' },
+  'workflows/timelines': { title: 'Timelines', editorId: 'orcher.workflows-timelines', icon: 'timer' },
+  executions: { title: 'Executions', editorId: 'orcher.executions-table', icon: 'executions' },
+  namespaces: { title: 'Namespaces', editorId: 'orcher.namespaces-table', icon: 'namespaces' },
+  schedules: { title: 'Schedules', editorId: 'orcher.schedules-table', icon: 'schedules' },
+  workers: { title: 'Workers', editorId: 'orcher.workers-table', icon: 'workers' },
+  'batch-operations': { title: 'Batch Operations', editorId: 'orcher.batch-operations', icon: 'batch' },
+  journal: { title: 'Journal', editorId: 'orcher.journal-viewer', icon: 'journal' },
+  settings: { title: 'Settings', editorId: 'settings', icon: 'settings' },
+};
+
+/**
+ * The tab a browser path names: the reverse of useTabUrlSync, so that a link
+ * to `/orcher/executions`, or a reload there, opens that page.
+ */
+function tabForPath(pathname: string) {
+  const match = pathname.match(/^\/orcher\/(.+?)\/?$/);
+  if (!match) return null;
+  const rest = match[1];
+  const known = LINKABLE_TABS[rest];
+  if (known) return { ...known, uri: `orcher://${rest}` };
+  const run = rest.match(/^workflows\/([^/]+)$/);
+  if (run) {
+    const id = decodeURIComponent(run[1]);
+    return {
+      title: id.slice(0, 16),
+      editorId: 'orcher.workflow-detail',
+      uri: `orcher://workflows/${run[1]}`,
+      icon: 'workflow-detail',
+    };
+  }
+  return null;
+}
+
 // Sync active tab URI to browser URL
 function useTabUrlSync() {
   const { layout } = useWindowManager();
@@ -442,10 +480,13 @@ function WorkflowsSidebar({ openTab }: { openTab: (tab: any) => void }) {
 
 function OrcherShell() {
   const { openTab } = useWindowManager();
+  // Read before useTabUrlSync rewrites the address to the active tab's
+  const initialPathRef = useRef(typeof window === 'undefined' ? '' : window.location.pathname);
   useTabUrlSync();
   const [sidebarActive, setSidebarActive] = useState<string | null>(null);
 
-  // Show Welcome tab on first visit or version update
+  // Show Welcome tab on first visit or version update, then the page the
+  // address names, opened last so that it is the one in front
   const welcomeCheckedRef = useRef(false);
   useEffect(() => {
     if (welcomeCheckedRef.current) return;
@@ -459,6 +500,8 @@ function OrcherShell() {
         icon: 'rocket',
       });
     }
+    const linked = tabForPath(initialPathRef.current);
+    if (linked) openTab(linked);
   }, [openTab]);
   const drawerStackRef = useRef<DrawerState[]>([]);
   const [drawerState, setDrawerState] = useState<DrawerState>({ type: null, id: null, title: '' });
