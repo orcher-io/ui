@@ -35,11 +35,11 @@ later) serves the files in `ui.dir`, `/usr/share/orcher/ui` unless set; `--no-ui
 it off. To serve a release yourself:
 
 ```bash
-gh release download v0.2.1 --repo orcher-io/ui -p 'orcher-ui-*'
-sha256sum -c orcher-ui-0.2.1.tar.gz.sha256
-gh attestation verify orcher-ui-0.2.1.tar.gz --repo orcher-io/ui
-tar -xzf orcher-ui-0.2.1.tar.gz
-ORCHER_UI_DIR=$PWD/orcher-ui-0.2.1 orchestrator
+gh release download v0.3.0 --repo orcher-io/ui -p 'orcher-ui-*'
+sha256sum -c orcher-ui-0.3.0.tar.gz.sha256
+gh attestation verify orcher-ui-0.3.0.tar.gz --repo orcher-io/ui
+tar -xzf orcher-ui-0.3.0.tar.gz
+ORCHER_UI_DIR=$PWD/orcher-ui-0.3.0 orchestrator
 ```
 
 > [!NOTE]
@@ -110,7 +110,7 @@ default transport, plain `fetch`.
 Bump `version` in `package.json` in a pull request, merge it, then push the tag:
 
 ```bash
-git tag v0.2.2 && git push origin v0.2.2
+git tag v0.3.1 && git push origin v0.3.1
 ```
 
 The Release workflow publishes `orcher-ui-<version>.tar.gz` (the static files,
